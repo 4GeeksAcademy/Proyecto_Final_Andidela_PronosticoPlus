@@ -9,9 +9,10 @@ class User(db.Model):
     last_name = db.Column(db.String(120), unique=False, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(200), unique=False, nullable=False)
-    city = db.Column(db.String(100), unique=True, nullable=False)
+    city = db.Column(db.String(100), unique=False, nullable=False)
     phone_number = db.Column(db.String(100), unique=False, nullable=False)
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
+    favorites = db.relationship("Favorites", back_populates="user", lazy=True)
 
 
     def __repr__(self):
@@ -29,24 +30,15 @@ class User(db.Model):
             
             # do not serialize the password, its a security breach
         }
-class City(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), unique=True, nullable=False)
-    country_id = db.Column(db.Integer, db.ForeignKey('country.id'), nullable=False)
-
-    def __repr__(self):
-        return f'<City {self.id}>'
-
-    def serialize(self):
+    def serialize_favorite_cities(self):
         return {
-            "id": self.id,
-            "name": self.name,
-            
+            "user": self.serialize(),
+            "favorites": [favorite.serialize() for favorite in self.favorites]
         }
-
 class Country(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), unique=True, nullable=False)
+    cities = db.relationship("City", back_populates="country", lazy=True)
 
     def __repr__(self):
         return f'<Country {self.id}>'
@@ -57,11 +49,12 @@ class Country(db.Model):
             "name": self.name,
             
         }
-
-class Favoritos(db.Model):
+    
+class City(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120), unique=True, nullable=False)
     country_id = db.Column(db.Integer, db.ForeignKey('country.id'), nullable=False)
-    city_id = db.Column(db.Integer, db.ForeignKey('city.id'), nullable=False)
+    country = db.relationship("Country")
 
     def __repr__(self):
         return f'<City {self.id}>'
@@ -69,5 +62,24 @@ class Favoritos(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-            
+            "name": self.name,
+            "country": self.country.serialize()
+        }
+
+
+
+class Favorites(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    city_id = db.Column(db.Integer, db.ForeignKey('city.id'), nullable=False)
+    user = db.relationship("User")
+    city = db.relationship("City")
+
+    def __repr__(self):
+        return f'<Favorites {self.id}>'
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "city": self.city.serialize()
         }

@@ -46,7 +46,33 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				//reset the global store
 				setStore({ demo: demo });
-			}
+			},
+			register: async (obj) => {
+				//console.log(username, name, last_name, email, password, city, phone_number);
+
+				try {
+					// fetching data from the backend
+					const response = await fetch(process.env.BACKEND_URL + "/api/register", {
+						method: "POST",
+						headers: {
+							"Content-type": "application/json"
+						},
+						body: JSON.stringify(obj)
+					});
+					if (!response.ok) {
+						throw new Error("Failed to Register");
+					}
+					const data = await response.json();
+
+
+					// don't forget to return something, that is how the async resolves
+					console.log("User:", data);
+
+					return data;
+				} catch (error) {
+					console.log("Error loading message from backend", error);
+				}
+			},
 		}
 	};
 };
