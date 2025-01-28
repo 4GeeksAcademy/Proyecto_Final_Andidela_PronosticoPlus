@@ -13,7 +13,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					background: "white",
 					initial: "white"
 				}
-			]
+			],
+			currentUser: null,
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -73,6 +74,63 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log("Error loading message from backend", error);
 				}
 			},
+			login: async (email, password) => {
+				console.log(email,password);
+				
+				try{
+					// fetching data from the backend
+					const response = await fetch(process.env.BACKEND_URL + "/api/login", {
+						method: "POST",
+						headers: {
+							"Content-type": "application/json" 
+						},
+						body: JSON.stringify({
+							email: email,
+							password: password
+						})
+					})
+					if (!response.ok){
+						throw new Error ("Failed to Login")
+					}
+					const data = await response.json()
+
+					localStorage.setItem("accessToken", data.access_token)
+
+					setStore({ currentUser: data.user })
+					// don't forget to return something, that is how the async resolves
+					console.log("User:", data);
+					
+					return data;
+				}catch(error){
+					setStore({ currentUser: false })
+					console.log("Error loading message from backend", error)
+				}
+			},
+			viewProfile: async () => {
+				let myToken = localStorage.getItem("accessToken")	
+					try{
+						// fetching data from the backend
+						const response = await fetch(process.env.BACKEND_URL + "/api/profile", {
+							method: "GET",
+							headers: {
+								"Content-type": "application/json",
+								"authorization": `Bearer ${myToken}` 
+							},
+						})
+						if (response.ok){
+							const data = await response.json()
+							console.log(data);
+							setStore({currentUser:data})
+							return data
+					
+						}
+	
+						// don't forget to return something, that is how the async resolves
+						
+					}catch(error){
+						console.log("Error loading message from backend", error)
+					}
+				},
 		}
 	};
 };

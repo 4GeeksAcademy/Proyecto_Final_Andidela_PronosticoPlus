@@ -9,10 +9,11 @@ class User(db.Model):
     last_name = db.Column(db.String(120), unique=False, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(200), unique=False, nullable=False)
-    city = db.Column(db.String(100), unique=False, nullable=False)
+    city_id = db.Column(db.Integer, db.ForeignKey('city.id'), nullable=False)
     phone_number = db.Column(db.String(100), unique=False, nullable=False)
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
     favorites = db.relationship("Favorites", back_populates="user", lazy=True)
+    city = db.relationship("City")
 
 
     def __repr__(self):
@@ -22,7 +23,7 @@ class User(db.Model):
         return {
             "id": self.id,
             "email": self.email,
-            "city": self.city,
+            "city": self.city.serialize(),
             "username": self.username,
             "name": self.name,
             "last_name": self.last_name,
