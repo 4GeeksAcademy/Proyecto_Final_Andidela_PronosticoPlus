@@ -131,6 +131,28 @@ const getState = ({ getStore, getActions, setStore }) => {
 						console.log("Error loading message from backend", error)
 					}
 				},
+			getGeoData: async (cityName) =>{
+				
+				
+				const response = await fetch(`${process.env.OPENWEATHER_URL}/geo/1.0/direct?q=${cityName}&appid=${process.env.OPENWEATHER_API_KEY}`)
+				if(response.ok){
+					const data=await response.json()
+					console.log(data);
+					return data
+				}
+				return false
+			},
+			getCurrentWeather: async (lat,lon) =>{
+			
+				
+				const response = await fetch(`${process.env.OPENWEATHER_URL}/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${process.env.OPENWEATHER_API_KEY}`)
+				if(response.ok){
+					const data=await response.json()
+					console.log(data);
+					return data
+				}
+				return false
+			},
 		}
 	};
 };
