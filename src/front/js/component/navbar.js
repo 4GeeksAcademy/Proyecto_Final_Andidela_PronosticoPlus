@@ -1,29 +1,53 @@
 import React, { useContext } from "react";
 import { Context } from "../store/appContext"
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export const Navbar = () => {
-	const { store } = useContext(Context)
+	const { store, actions } = useContext(Context)
+	const handleLogout = async () => {
+		try {
+			const success = await actions.logOut();
+
+			if (success) {
+				Swal.fire({
+					icon: 'success',
+					title: 'Cierre de sesión exitoso',
+					text: 'Te has desconectado correctamente.',
+				}).then(() => {
+				});
+			} else {
+				console.error('No se pudo cerrar sesión.');
+			}
+		} catch (error) {
+			console.error('Error durante el cierre de sesión:', error);
+			Swal.fire({
+				icon: 'error',
+				title: 'Error',
+				text: 'Ocurrió un error durante el cierre de sesión.',
+			});
+		}
+	};
 	return (
-		<nav className="navbar navbar-light bg-light">
+		<nav className="navbar my-navbar">
 			<div className="container">
 				<Link to="/">
-					<span className="navbar-brand mb-0 h1">React Boilerplate</span>
+					<span style={{ color: '#003285' }} className="navbar-brand mb-0 h1">WeatherWatch</span>
 				</Link>
 				<div className="ml-auto">
 					{store.currentUser ? 
 					<>
-					<span>Hello, {store.currentUser.username}</span> 
-					<button className="btn btn-primary ms-2">Log out</button>
+					<span className="cuprum">Hello, {store.currentUser.username}</span> 
+					<button style={{ backgroundColor: '#2A629A', borderColor: '#2A629A' }} className="btn btn-secondary ms-2" type="button" onClick={handleLogout}>Log out</button>
 					</>
 					
 					:
 						<>
 							<Link to="/register">
-								<button className="btn btn-primary">Register</button>
+								<button style={{ backgroundColor: '#2A629A', borderColor: '#2A629A' }} className="btn btn-primary">Register</button>
 							</Link>
 							<Link to="/login">
-								<button className="btn btn-primary ms-2">Log in</button>
+								<button style={{ backgroundColor: '#2A629A', borderColor: '#2A629A' }} className="btn btn-primary ms-2">Log in</button>
 							</Link>
 						</>
 

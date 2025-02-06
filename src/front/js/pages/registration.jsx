@@ -39,7 +39,7 @@ setSelectedCountry(countries.find(country => country.name == data.country))
     return (
         <div className="container">
             <form onSubmit={handleRegister}>
-                <form className="row g-3">
+                <form className="row g-3 cuprum">
                     <div className="fs-2 d-flex justify-content-center mt-3">Register</div>
                     <div className="col-md-6">
                         <label for="inputEmail4" className="form-label">Email</label>
@@ -83,16 +83,12 @@ setSelectedCountry(countries.find(country => country.name == data.country))
 
                         </select>
                     </div>
-                    {/* <div className="col-md-6">
-                        <label for="inputCity" className="form-label">City</label>
-                        <input type="text" className="form-control" id="city" name="city" value={data.city} onChange={handleChange} />
-                    </div> */}
                     <div className="col-md-6">
                         <label for="inputCity" className="form-label">Phone number</label>
                         <input type="text" className="form-control" id="phone_number" name="phone_number" value={data.phone_number} onChange={handleChange} />
                     </div>
                     <div className="col-12">
-                        <button type="submit" className="btn btn-primary">Register</button>
+                        <button style={{ backgroundColor: '#2A629A', borderColor: '#2A629A' }} type="submit" className="btn btn-primary">Register</button>
                     </div>
                 </form>
             </form>

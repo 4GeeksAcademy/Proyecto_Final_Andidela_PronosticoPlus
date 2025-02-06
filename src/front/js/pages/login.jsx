@@ -26,7 +26,7 @@ export const Login = () => {
         }
     }
     return (
-        <div className="container mt - 5">
+        <div className="container mt - 5 cuprum">
             <form onSubmit={handleLogin}>
                 <div className="fs-2 d-flex justify-content-center mt-3">Log in</div>
                 <div className="row mb-3 fs-3">
@@ -42,7 +42,7 @@ export const Login = () => {
                     </div>
                 </div>
                 <div className="d-flex justify-content-center">
-                    <button type="submit" className="btn btn-primary">Login</button>
+                    <button style={{ backgroundColor: '#2A629A', borderColor: '#2A629A' }} type="submit" className="btn btn-primary">Login</button>
                 </div>
                 <div className="fs-6">Forgot Password</div>
             </form>

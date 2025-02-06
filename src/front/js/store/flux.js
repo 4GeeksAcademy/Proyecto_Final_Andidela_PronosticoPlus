@@ -124,8 +124,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 							return data
 					
 						}
-	
-						// don't forget to return something, that is how the async resolves
 						
 					}catch(error){
 						console.log("Error loading message from backend", error)
@@ -153,6 +151,33 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 				return false
 			},
+			logOut: async () => {
+				try {
+					const actions = getActions()
+					localStorage.removeItem("accessToken")
+					setStore({currentUser:null})
+					actions.viewProfile()
+					return true
+				}
+
+				catch(error) {
+					console.log("Error logging out", error)
+					return false
+				}
+			},
+			fetchHourlyWeather : async (lat,lon) => {
+				const response = await fetch(`${process.env.OPENWEATHER_URL}/data/3.0/onecall?lat=${lat}&lon=${lon}&units=metric&appid=${process.env.OPENWEATHER_API_KEY}`)
+			  
+			  
+				  if(response.ok){
+					const data=await response.json()
+					console.log(data.hourly);
+					return data.hourly
+				}
+				return false
+				
+			  },
+			  
 		}
 	};
 };

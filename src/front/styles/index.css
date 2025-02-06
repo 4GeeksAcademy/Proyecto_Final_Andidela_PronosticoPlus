@@ -1,3 +1,19 @@
 /* 
     General Styles used on every website (Don't Repeat Yourself)
 */
+
+
+.cuprum {
+    font-family: "Cuprum", serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    color: #003285;
+}
+.my-navbar {
+    background-color: #FFDA78;
+}
+
+.all-text {
+    color: #003285
+}

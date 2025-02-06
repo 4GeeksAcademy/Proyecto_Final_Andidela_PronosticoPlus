@@ -3,9 +3,6 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
 import json
-# import API?
-# import requests
-# import https
 from flask import current_app
 from flask_bcrypt import Bcrypt
 from api.models import db, User, Country, City
@@ -19,35 +16,6 @@ api = Blueprint('api', __name__)
 bcrypt = Bcrypt()
 
 
-# API endpoint
-# API_KEY = "ff9244076b782d10106c2ce702ad52d3"
-# BASE_URL = "http://api.openweathermap.org/data/2.5/weather"
-
-# @api.route('/profile', methods=['GET'])
-# def get_weather():
-#     city = request.args.get('city')
-#     if not city:
-#         return jsonify({"error": "Please provide a city name"}), 400
-#     url = f"{https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&exclude={part}&appid={ff9244076b782d10106c2ce702ad52d3}}?q={city}&appid={ff9244076b782d10106c2ce702ad52d3}&units=metric"
-#     try:
-#         response = requests.get(url)
-#         response.raise_for_status()
-#         data = response.json()
-#         weather = {
-#             "city": data["name"],
-#             "temperature": data["main"]["temp"],
-#             "description": data["weather"][0]["description"],
-#             "humidity": data["main"]["humidity"],
-#         }
-#         return jsonify(weather)
-
-#     except requests.exceptions.RequestException as e:
-#         return jsonify({"error": str(e)}), 500
-
-# if __name__ == '__main__':
-#     api.run(debug=True)
-
-# Allow CORS requests to this API
 CORS(api)
 
 
