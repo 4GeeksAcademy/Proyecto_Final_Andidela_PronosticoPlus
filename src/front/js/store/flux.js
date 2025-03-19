@@ -74,6 +74,35 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log("Error loading message from backend", error);
 				}
 			},
+
+			editProfile: async (obj) => {
+				//console.log(username, name, last_name, email, password, city, phone_number);
+				let myToken = localStorage.getItem("accessToken")
+				try {
+					// fetching data from the backend
+					const response = await fetch(process.env.BACKEND_URL + "/api/profile/edit", {
+						method: "PUT",
+						headers: {
+							"Content-type": "application/json",
+							"Authorization": `Bearer ${myToken}` 
+						},
+						body: JSON.stringify(obj)
+					});
+					if (!response.ok) {
+						throw new Error("Failed to Edit Profile");
+					}
+					const data = await response.json();
+
+
+					// don't forget to return something, that is how the async resolves
+					console.log("User:", data);
+					setStore({currentUser:data.user})
+					return data;
+				} catch (error) {
+					console.log("Error loading message from backend", error);
+				}
+			},
+
 			login: async (email, password) => {
 				console.log(email,password);
 				
@@ -173,6 +202,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const data=await response.json()
 					console.log(data.hourly);
 					return data.hourly
+				}
+				return false
+				
+			  },
+			  fetchDailyWeather : async (lat,lon) => {
+				const response = await fetch(`${process.env.OPENWEATHER_URL}/data/3.0/onecall?lat=${lat}&lon=${lon}&units=metric&exclude=current,minutely,hourly,alerts&appid=${process.env.OPENWEATHER_API_KEY}`)
+			  
+			  
+				  if(response.ok){
+					const data=await response.json()
+					console.log(data.daily);
+					return data.daily
 				}
 				return false
 				

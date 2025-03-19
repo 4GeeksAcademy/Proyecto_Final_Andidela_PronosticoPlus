@@ -41,7 +41,7 @@ export const Profile = () => {
                     <h6 className="card-subtitle mb-2 text-body-secondary">Feels like: {weather.main && weather.main.feels_like} °C</h6>
                     <h6 className="card-subtitle mb-2 text-body-secondary">Humidity: {weather.main && weather.main.humidity} %</h6>
                     <Link to={`/hourly/${weather.coord && weather.coord.lat}/${weather.coord && weather.coord.lon}`} className="card-link">Hourly</Link>
-                    <a href="#" className="card-link">Tomorrow</a>
+                    <Link to={`/tomorrow/${weather.coord && weather.coord.lat}/${weather.coord && weather.coord.lon}`}  className="card-link">8-Day Forecast</Link>
                 </div>
             </div>
         </>

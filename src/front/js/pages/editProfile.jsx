@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import countries from "../json/countries.json"
 import { Context } from "../store/appContext";
 
-export const Registration = () => {
+export const EditProfile = () => {
     const { store, actions } = useContext(Context);
     const navigate = useNavigate()
     const [data, setData] = useState({
@@ -23,30 +23,34 @@ export const Registration = () => {
             ...prevData, [name]: value
         }))
     }
-    const handleRegister = async (e) => {
+    const handleEditProfile = async (e) => {
         e.preventDefault()
-        const result = await actions.register(data)
+        const result = await actions.editProfile(data)
         if (result) {
             alert(result.msg)
-            navigate("/login")
+            navigate("/profile")
         } else {
-            alert("Failed to register")
+            alert("Failed to edit profile")
         }
     }
+
     useEffect(()=>{
-setSelectedCountry(countries.find(country => country.name == data.country))
+        setSelectedCountry(countries.find(country => country.name == data.country))
     },[data.country])
-    
+
     useEffect(()=>{
-            if(store.currentUser) {
-                navigate("/profile")
-            }
+        if(!store.currentUser) {
+            navigate("/login")
+        }
+        if(store.currentUser) {
+            setData({...store.currentUser, country: store.currentUser.city.country.name, city: store.currentUser.city.name})
+        }
     },[store.currentUser])
-    return (
+    return store.currentUser && (
         <div className="container">
-            <form onSubmit={handleRegister}>
+            <form onSubmit={handleEditProfile}>
                 <form className="row g-3 cuprum">
-                    <div className="fs-2 d-flex justify-content-center mt-3">Register</div>
+                    <div className="fs-2 d-flex justify-content-center mt-3">Edit Profile</div>
                     <div className="col-md-6">
                         <label for="inputEmail4" className="form-label">Email</label>
                         <input type="email" className="form-control" id="inputEmail4" name="email" value={data.email} onChange={handleChange} />
@@ -68,7 +72,7 @@ setSelectedCountry(countries.find(country => country.name == data.country))
                         <input type="text" className="form-control" id="last_name" name="last_name" value={data.last_name} onChange={handleChange} />
                     </div>
                     <div className="col-md-6">
-                        <select defaultValue={0} onChange={handleChange} name="country" class="form-select" aria-label="Default select example">
+                        <select value={data.country} onChange={handleChange} name="country" class="form-select" aria-label="Default select example">
                             <option value={0} disabled>Select your country</option>
                             {countries.map((country, index) => {
                                 return (
@@ -79,7 +83,7 @@ setSelectedCountry(countries.find(country => country.name == data.country))
                         </select>
                     </div>
                     <div className="col-md-6">
-                        <select defaultValue={0} onChange={handleChange} name="city" class="form-select" aria-label="Default select example">
+                        <select value={data.city} onChange={handleChange} name="city" class="form-select" aria-label="Default select example">
                             <option value={0} disabled>Select your city</option>
                             {selectedCountry?.states && selectedCountry?.states.length > 0 && selectedCountry.states.map((city, index) => {
                                 return (
@@ -94,7 +98,7 @@ setSelectedCountry(countries.find(country => country.name == data.country))
                         <input type="text" className="form-control" id="phone_number" name="phone_number" value={data.phone_number} onChange={handleChange} />
                     </div>
                     <div className="col-12">
-                        <button style={{ backgroundColor: '#2A629A', borderColor: '#2A629A' }} type="submit" className="btn btn-primary">Register</button>
+                        <button style={{ backgroundColor: '#2A629A', borderColor: '#2A629A' }} type="submit" className="btn btn-primary">Edit</button>
                     </div>
                 </form>
             </form>

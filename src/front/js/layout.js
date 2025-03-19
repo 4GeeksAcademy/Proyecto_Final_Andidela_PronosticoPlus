@@ -8,12 +8,14 @@ import { Demo } from "./pages/demo";
 import { Registration } from "./pages/registration.jsx";
 import { Login } from "./pages/login.jsx";
 import { Profile } from "./pages/profile.jsx";
+import { EditProfile } from "./pages/editProfile.jsx"
 import { Single } from "./pages/single";
 import injectContext from "./store/appContext";
 
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
 import { Hourly } from "./pages/hourly.jsx";
+import { Tomorrow } from "./pages/tomorrow.jsx";
 
 //create your first component
 const Layout = () => {
@@ -35,6 +37,8 @@ const Layout = () => {
                         <Route element={<Profile />} path="/profile" />
                         <Route element={<Login />} path="/login" />
                         <Route element={<Hourly />} path="/hourly/:lat/:lon" />
+                        <Route element={<Tomorrow />} path="/tomorrow/:lat/:lon" />
+                        <Route element={<EditProfile />} path="/editProfile" />
                         <Route element={<Single />} path="/single/:theid" />
                         <Route element={<h1>Not found!</h1>} />
                     </Routes>

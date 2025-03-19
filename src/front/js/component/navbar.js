@@ -32,22 +32,41 @@ export const Navbar = () => {
 		<nav className="navbar my-navbar">
 			<div className="container">
 				<Link to="/">
-					<span style={{ color: '#003285' }} className="navbar-brand mb-0 h1">WeatherWatch</span>
+					<span style={{ color: '#003285' }} className="navbar-brand mb-0 h1 cuprum">WeatherWatch</span>
 				</Link>
 				<div className="ml-auto">
-					{store.currentUser ? 
-					<>
-					<span className="cuprum">Hello, {store.currentUser.username}</span> 
-					<button style={{ backgroundColor: '#2A629A', borderColor: '#2A629A' }} className="btn btn-secondary ms-2" type="button" onClick={handleLogout}>Log out</button>
-					</>
-					
-					:
+					{store.currentUser ?
+						
+							<div class="dropdown">
+								<button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+									<span className="cuprum">Hello, {store.currentUser.username}</span>
+								</button>
+								<ul class="dropdown-menu">
+									<li><Link to="/profile">Back to Profile</Link></li>
+									<li><Link to="/editProfile">Edit Profile</Link></li>
+									<li><a class="dropdown-item" href="#" onClick={handleLogout}>Logout</a></li>
+								</ul>
+							</div>
+							/* <li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+									<span className="cuprum">Hello, {store.currentUser.username}</span>
+								</a>
+								<ul class="dropdown-menu">
+									<li><a class="dropdown-item" href="#">Action</a></li>
+									<li><a class="dropdown-item" href="#">Another action</a></li>
+									<li><hr class="dropdown-divider" /></li>
+									<li><a class="dropdown-item" href="#">Something else here</a></li>
+								</ul>
+							</li>
+							<button style={{ backgroundColor: '#2A629A', borderColor: '#2A629A' }} className="btn btn-secondary ms-2 cuprum" type="button" onClick={handleLogout}>Log out</button> */
+
+						:
 						<>
 							<Link to="/register">
-								<button style={{ backgroundColor: '#2A629A', borderColor: '#2A629A' }} className="btn btn-primary">Register</button>
+								<button style={{ backgroundColor: '#2A629A', borderColor: '#2A629A' }} className="btn btn-primary cuprum">Register</button>
 							</Link>
 							<Link to="/login">
-								<button style={{ backgroundColor: '#2A629A', borderColor: '#2A629A' }} className="btn btn-primary ms-2">Log in</button>
+								<button style={{ backgroundColor: '#2A629A', borderColor: '#2A629A' }} className="btn btn-primary ms-2 cuprum">Log in</button>
 							</Link>
 						</>
 

@@ -25,6 +25,13 @@ export const Login = () => {
             alert("Failed to log in")
         }
     }
+
+    useEffect(()=>{
+        if(store.currentUser) {
+            navigate("/profile")
+        }
+    },[store.currentUser])
+
     return (
         <div className="container mt - 5 cuprum">
             <form onSubmit={handleLogin}>
@@ -36,7 +43,7 @@ export const Login = () => {
                     </div>
                 </div>
                 <div className="row mb-3 fs-3">
-                    <label htmlForm="inputPassword3" className="col-sm-2 col-form-label">Password</label>
+                    <label htmlForm="inputPassword3" className="col-sm-2 col-form-label me-0">Password</label>
                     <div className="col-sm-10">
                         <input type="password" className="form-control" id="inputPassword3" name="password" value={data.password} onChange={handleChange} />
                     </div>
@@ -44,7 +51,7 @@ export const Login = () => {
                 <div className="d-flex justify-content-center">
                     <button style={{ backgroundColor: '#2A629A', borderColor: '#2A629A' }} type="submit" className="btn btn-primary">Login</button>
                 </div>
-                <div className="fs-6">Forgot Password</div>
+                <div Link to="/forgot" className="fs-6">Forgot Password</div>
             </form>
         </div>
     );

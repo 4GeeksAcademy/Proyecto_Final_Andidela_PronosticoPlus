@@ -27,6 +27,7 @@ def create_one_user():
         print(raw_password)
         password_hash = bcrypt.generate_password_hash(raw_password).decode("utf-8")
         country=Country.query.filter_by(name=body.get("country")).first()
+        city=None
         if not country:
             country=Country(name=body.get("country"))
             db.session.add(country)
@@ -81,3 +82,58 @@ def get_profile():
     if not current_user:
         return jsonify({"error": "user not found"}), 404
     return jsonify(current_user.serialize()), 200
+
+@api.route("/profile/edit", methods=["PUT"])
+@jwt_required()
+def edit_profile():
+    try:
+        body = json.loads(request.data)
+        user_email = get_jwt_identity()
+        current_user=User.query.filter_by(email=user_email).first()
+        print(current_user)
+        if not current_user:
+            return jsonify({"error": "user not found"}), 404
+        username=body.get("username",None)
+        password=body.get("password",None)
+        name=body.get("name",None)
+        last_name=body.get("last_name",None)
+        email=body.get("email",None)
+        phone_number=body.get("phone_number",None)
+        country_name=body.get("country",None)
+        city_name=body.get("city",None)
+        password_hash=None
+        if password:
+            if password.trim() != "":
+                password_hash = bcrypt.generate_password_hash(password).decode("utf-8")
+        if country_name:
+            country=Country.query.filter_by(name=country_name).first()
+            if not country:
+                country=Country(name=country_name)
+                db.session.add(country)
+                db.session.commit()
+                db.session.refresh(country)
+        if city_name:
+            city=City.query.filter_by(name=city_name).first()
+            if not city:
+                city=City(name=city_name,country_id=country.id)
+                db.session.add(city)
+                db.session.commit()
+                db.session.refresh(city)
+
+        current_user.username=username if username else current_user.username,
+        if password_hash:   
+            current_user.password=password_hash if password else current_user.password,
+        current_user.name=name if name else current_user.name,
+        current_user.last_name=last_name if last_name else current_user.last_name,
+        current_user.email=email if email else current_user.email,
+        current_user.city_id=city.id if city else current_user.city_id,
+        current_user.phone_number=phone_number if phone_number else current_user.phone_number,
+        
+        db.session.commit()
+        db.session.refresh(current_user)
+
+        return jsonify({"msg": "user updated", "user": current_user.serialize()}), 201
+
+    except Exception as e:
+        current_app.logger.error(f"error al editar el usuario:{str(e)}")
+        return jsonify({"error": "ocurrio un error al procesar la solicitud"}), 500
